@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+    <script src="bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+    <link rel="import" href="bower_components/vaadin-valo-theme/vaadin-grid.html">
+    <link rel="import" href="bower_components/vaadin-valo-theme/vaadin-button.html">
+    <link rel="import" href="bower_components/vaadin-grid/vaadin-grid.html">
+    <link rel="import" href="bower_components/vaadin-button/vaadin-button.html">
+</head>
+<body>
+<x-array-data-example></x-array-data-example>
+<dom-module id="x-array-data-example">
+    <template preserve-content>
+        <vaadin-grid id="grid" aria-label="Array Data Example" items="[[items]]" on-active-item-changed="_onActiveItemChanged">
+
+            <vaadin-grid-column width="50px" flex-grow="0">
+                <template class="header">#</template>
+                <template>[[index]]</template>
+            </vaadin-grid-column>
+
+            <vaadin-grid-column>
+                <template class="header">First Name</template>
+                <template>[[item.firstName]]</template>
+            </vaadin-grid-column>
+
+            <vaadin-grid-column>
+                <template class="header">Last Name</template>
+                <template>[[item.lastName]]</template>
+            </vaadin-grid-column>
+
+            <template class="row-details" id="det">
+                    No details!
+            </template>
+        </vaadin-grid>
+        <vaadin-button on-click="_toggleDetails">
+            Add Details
+        </vaadin-button>
+    </template>
+    <script>
+        window.addEventListener('WebComponentsReady', function () {
+            class XArrayDataExample extends Polymer.Element {
+                static get is() {
+                    return 'x-array-data-example';
+                }
+                _toggleDetails(e) {
+                    var detailsTemplate = this.$.grid.querySelector("template.row-details");
+                    detailsTemplate.innerHTML=" <div class='details'><p>Hi! My name is [[item.firstName]]!</p></div>"
+                }
+                _onActiveItemChanged(e) {
+                    this.$.grid.detailsOpenedItems = [e.detail.value];
+
+                }
+
+                ready() {
+                    super.ready();
+                    const items = [];
+
+                    for (var i = 0; i < 100; i++) {
+                        items.push({firstName: 'First Name ' + i, lastName: 'Last Name ' + i});
+                    }
+
+                    this.items = items;
+                }
+            }
+
+            window.customElements.define(XArrayDataExample.is, XArrayDataExample);
+        });
+    </script>
+</dom-module>
+</body>
+</html>
