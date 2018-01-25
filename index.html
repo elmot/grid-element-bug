@@ -43,8 +43,12 @@
                     return 'x-array-data-example';
                 }
                 _toggleDetails(e) {
-                    var detailsTemplate = this.$.grid.querySelector("template.row-details");
-                    detailsTemplate.innerHTML=" <div class='details'><p>Hi! My name is [[item.firstName]]!</p></div>"
+                    var grid = this.$.grid;
+                    grid.removeChild(grid.querySelector('.row-details'));
+                    const newTemplate = document.createElement('template');
+                    newTemplate.classList.add('row-details');
+                    newTemplate.innerHTML = "Hi! My name is [[item.firstName]]";
+                    grid.appendChild(newTemplate);
                 }
                 _onActiveItemChanged(e) {
                     this.$.grid.detailsOpenedItems = [e.detail.value];
